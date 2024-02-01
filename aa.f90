@@ -3,7 +3,7 @@ implicit none
 integer i,imax,k,n
 parameter(imax=5000)
 real fhb,fmax,d,del,dt,ksp,kgs,lam,lama,gam,x,xa,y,po,ax,axa,ay,m,s,t,sumi,sumr,om,amp,u1,u2,z1,z2
-real xt(imax)
+real xt(imax),noise(imax)
 parameter(gam=1.3,dt=1.e-2,lam=2.8,lama=10.,d=60.9,s=0.65,m=1.,ksp=0.65,kgs=0.75,del=4.44)
 
 open(1,file='aa') 
@@ -25,14 +25,14 @@ x=-101.;xa=-100.;y=1.
 !fmax=(n-1.)*0.2
 !fmax=200
 !fmax=n
-fmax=50.24
+fmax=48.
 
 do i=1,imax
 
 po=1./(1.+exp(10.)*exp(-(x-xa)/del))!open probability
 fhb=-lam*y-kgs*(x-xa-d*po)-ksp*x!applied force
 !!!!!!!!!!i!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-ay=-gam*y+fhb/m+noise(i)
+ay=-gam*y+fhb/m+100.*noise(i)
 ax=y
 
 axa=(kgs/lama)*(x-xa-d*po)-(fmax/lama)*(1.-s*po)
@@ -43,7 +43,7 @@ x=x+ax*dt!position of hair bundle
 xa=xa+axa*dt!position of motor protein
 t=i*dt
 !write(1,*) i*dt,x
-write(1,*) t,x
+write(1,*) x,xa
 xt(i)=x
 enddo
 
